@@ -1,16 +1,25 @@
 package com.example.gateway.controller
 
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+import reactor.core.publisher.Mono
+
 @RestController
-@RequestMapping("/fallback")
-class FallbackController {
-    @GetMapping("/billingFallback")
-    public ResponseEntity<String> billingFallback() {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("We are facing a problem. Please contact support")
+class HystrixFallbackRestController {
+    @GetMapping("/api/fallback")
+    Mono<String> getApiSvcMsg() {
+        return Mono.just("No response from api service and will be back shortly")
     }
+
+    @GetMapping("/fx-exchange/fallback")
+    Mono<String> getFxSvcMsg() {
+        return Mono.just("No response from Forex Service and will be back shortly")
+    }
+
+    @GetMapping("/cc-converter/fallback")
+    Mono<String> getCcSvcMsg() {
+        return Mono.just("No response from Currency Conversion Service and will be back shortly")
+    }
+
 }
